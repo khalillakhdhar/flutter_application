@@ -1,123 +1,166 @@
-// ignore_for_file: prefer_const_constructors, avoid_print
+// ignore_for_file: prefer_const_constructors, unnecessary_this, unnecessary_new, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application/config/palette.dart';
 import 'package:flutter_application/screens/drawer.dart';
 import 'package:flutter_application/widgets/custom_app_bar.dart';
 import 'package:flutter_application/widgets/stats_grid.dart';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_application/screens/income_expenses/view_expense.dart';
+import 'package:flutter_application/screens/income_expenses/view_income.dart';
+import 'package:flutter_application/screens/Contact/contact_screen.dart';
+import 'package:flutter_application/screens/Employer/Employer_screen.dart';
+import 'package:flutter_application/screens/Activity/activity_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class Income {
-  double Amount;
-  String Date;
-  String Details;
-  String Title;
-}
-
 class _HomeScreenState extends State<HomeScreen> {
-  DatabaseReference _expenseRef;
-  DatabaseReference _incomeRef;
-  DateTime date;
-  double i = 0;
-  double incomes = 0;
-  @override
-  void initState() {
-    date = DateTime.now();
-    String ndate = DateFormat('yyyy-MM-dd').format(date).toString();
-    final FirebaseDatabase database = FirebaseDatabase();
-    _expenseRef = database
-        .ref()
-        .child(FirebaseAuth.instance.currentUser.uid)
-        .child('Expense')
-        .child(ndate);
-    final FirebaseDatabase databaseincome = FirebaseDatabase();
-    _incomeRef = databaseincome
-        .ref()
-        .child(FirebaseAuth.instance.currentUser.uid)
-        .child('Income')
-        .child(ndate);
-    calculatein();
-    super.initState();
-  }
-
-  Future<void> calculatein() async {
-    date = DateTime.now();
-    String ndate = DateFormat('yyyy-MM-dd').format(date).toString();
-    final ref = FirebaseDatabase.instance.ref();
-    final snapshot = await ref
-        .child(FirebaseAuth.instance.currentUser.uid)
-        .child('Income')
-        .child(ndate)
-        .get();
-    if (snapshot.exists) {
-      //print(snapshot.value);
-      List<Income> incomes = [];
-
-      incomes.clear();
-      Map<dynamic, dynamic> values = snapshot.value;
-      values.forEach((key, values) {
-        incomes.add(values);
-      });
-      for (var inc in incomes) {
-        print(inc.Title);
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Palette.primaryColor,
-      appBar: CustomAppBar('Dashboard'),
-      drawer: AppDrawer(),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(20.0),
-                decoration: BoxDecoration(
-                  color: Palette.secondaryColor,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(40.0),
-                    bottomRight: Radius.circular(40.0),
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    StatsGrid('Income', '(somme)',
-                        'assets/images/increase_presentation_Profit_growth-512.png'),
-                    StatsGrid('Expense', '(somme)',
-                        'assets/images/decrease_presentation_down_loss-512.png'),
-                  ],
-                ),
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text("Home page"),
+      ),
+      body: new Container(
+        padding: new EdgeInsets.all(10.0),
+        child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            /* new Text("hello"),
+            new Text("good morning"),
+            new Text("good job"),
+            */
+            new MyCard(
+              destination: ViewIncome(),
+              title: new Text(
+                "Manage incomes ",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24.0,
+                    color: Colors.blue),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  StatsGrid('Contact', '',
-                      'assets/images/family_tree_members_people-512.png'),
-                  StatsGrid(
-                      'Employers', '', 'assets/images/211731_contact_icon.png'),
-                ],
+              icon: new Icon(Icons.paid, size: 40),
+              texte: new Text("your gains and incomes"),
+            ),
+            new MyCard(
+              destination: ViewExpense(),
+              title: new Text(
+                "manage expenses",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24.0,
+                    color: Colors.blue),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  StatsGrid('Activities', '',
-                      'assets/images/6593733_farm_machine_tractor_vehicle_icon.png'),
-                ],
+              icon: new Icon(
+                Icons.attach_money,
+                size: 40,
+                color: Colors.red,
               ),
+              texte: new Text("your salaries and daily expenses"),
+            ),
+            new MyCard(
+              destination: ActivityScreen(),
+              title: new Text(
+                "activity",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24.0,
+                    color: Colors.blue),
+              ),
+              icon: new Icon(
+                Icons.check_circle,
+                size: 40,
+                color: Colors.blue,
+              ),
+              texte: new Text("your daily and working activities"),
+            ),
+            new MyCard(
+              destination: EmployerScreen(),
+              title: new Text(
+                "Employees",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24.0,
+                    color: Colors.blue),
+              ),
+              icon: new Icon(
+                Icons.person,
+                size: 40,
+                color: Colors.blue,
+              ),
+              texte: new Text("your employees list and contacts"),
+            ),
+            new MyCard(
+              destination: contactScreen(),
+              title: new Text(
+                "Contacts",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24.0,
+                    color: Colors.blue),
+              ),
+              icon: new Icon(
+                Icons.person_add_alt_1_rounded,
+                size: 40,
+                color: Colors.blue,
+              ),
+              texte: new Text("your freinds mates and contacts"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class MyCard extends StatelessWidget {
+  MyCard({this.title, this.icon, this.texte, this.destination});
+  final Widget icon;
+  final Widget title;
+  final Widget destination;
+
+  final Widget texte;
+  @override
+  Widget build(BuildContext context) {
+    return new Container(
+        padding: new EdgeInsets.only(bottom: 20.0),
+        child: new Card(
+          child: new InkWell(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => destination));
+            },
+            child: new Container(
+              padding: EdgeInsets.all(15.0),
+              child: new Column(
+                children: <Widget>[this.icon, this.title, this.texte],
+              ),
+            ),
+          ),
+        ));
+  }
+}
+
+class MyInfo extends StatelessWidget {
+  MyInfo({this.title, this.url, this.texte});
+  final Widget url;
+  final Widget title;
+
+  final Widget texte;
+  @override
+  Widget build(BuildContext context) {
+    return new Container(
+      padding: new EdgeInsets.only(bottom: 20.0),
+      child: new Card(
+        child: new Container(
+          padding: EdgeInsets.all(15.0),
+          child: new Column(
+            children: <Widget>[
+              this.title,
+              this.texte,
+              this.url,
             ],
           ),
         ),
