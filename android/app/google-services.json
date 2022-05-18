@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "303691053716",
+    "project_id": "farmingapp-b9303",
+    "storage_bucket": "farmingapp-b9303.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:303691053716:android:b9f16f69869373a3449281",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "303691053716-0ofq38qsdgfjgdj9665qh0nao26qrfhn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpKlqyuFqyzOQ1Nxzoz-wBh45CgGu7k_Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "303691053716-0ofq38qsdgfjgdj9665qh0nao26qrfhn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
